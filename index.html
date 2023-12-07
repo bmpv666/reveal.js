@@ -16,8 +16,75 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>Docker for Dummies</h1>
+					<i style="font-style: italic; font-size: small">aka Docker workshop</i><br/>
+					<i>by Bruno Valentim</i>
+				</section>
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Index
+							- What is Docker? <!-- .element: class="fragment" data-fragment-index="1" -->
+								- Docker vs Regular VMs <!-- .element: class="fragment" data-fragment-index="2" -->
+							- Understanding Docker, the basics <!-- .element: class="fragment" data-fragment-index="3" -->
+								- Terminology <!-- .element: class="fragment" data-fragment-index="4" -->
+								- Why use containers? <!-- .element: class="fragment" data-fragment-index="5" -->
+								- Images vs Containers <!-- .element: class="fragment" data-fragment-index="6" -->
+							- The Docker Hub <!-- .element: class="fragment" data-fragment-index="7" -->
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Index (cont.)
+							- Docker files and images <!-- .element: class="fragment" data-fragment-index="1" -->
+								- How to create a Docker image <!-- .element: class="fragment" data-fragment-index="2" -->
+							- Docker Compose (vs Docker files) <!-- .element: class="fragment" data-fragment-index="3" -->
+								- How to use an existing Docker image <!-- .element: class="fragment" data-fragment-index="4" -->
+						</script>
+					</section>
+				</section>
+				<section data-auto-animate>
+					<h3>What is Docker?</h3>
+				</section>
+				<section data-auto-animate>
+					<h3>What is Docker?</h3>
+					Software platform that allows you to build, test, and deploy applications quickly.
+				</section>
+				<section data-auto-animate>
+					<h3>What is Docker?</h3>
+					Enables developers to automate the deployment and management of applications within software containers.
+				</section>
+				<section data-auto-animate>
+					<h3>What is Docker?</h3>
+					Provides a way to package applications and their dependencies into standardized units called Docker images.
+				</section>
+				<section data-transition="zoom-in fade-out">
+					<section data-auto-animate>
+						<h3>Docker ensures</h3>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker ensures</h3>
+						<ul>
+							<li>Portability</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker ensures</h3>
+						<ul>
+							<li>Portability</li>
+							<li>Consistency</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker ensures</h3>
+						<ul>
+							<li>Portability</li>
+							<li>Consistency</li>
+							<li>Encapsulation</li>
+						</ul>
+					</section>
+				</section>
 			</div>
 		</div>
 
@@ -31,6 +98,10 @@
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
 
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
