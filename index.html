@@ -39,8 +39,11 @@
 							## Index (cont.)
 							- Docker files and images <!-- .element: class="fragment" data-fragment-index="1" -->
 								- How to create a Docker image <!-- .element: class="fragment" data-fragment-index="2" -->
-							- Docker Compose (vs Docker files) <!-- .element: class="fragment" data-fragment-index="3" -->
-								- How to use an existing Docker image <!-- .element: class="fragment" data-fragment-index="4" -->
+								- How is a Docker Image created <!-- .element: class="fragment" data-fragment-index="3" -->
+								- Multi-stage builds <!-- .element: class="fragment" data-fragment-index="4" -->
+								- Best practices <!-- .element: class="fragment" data-fragment-index="5" -->
+							- Docker Compose (vs Docker files) <!-- .element: class="fragment" data-fragment-index="6" -->
+								- How to use an existing Docker image <!-- .element: class="fragment" data-fragment-index="7" -->
 						</script>
 					</section>
 				</section>
@@ -105,11 +108,11 @@
 					<section data-transition="zoom-in fade-out">
 						<h3>Terminology</h3>
 						<ul>
-							<li>Docker Image</li>
-							<li>Docker Container</li>
-							<li>Docker Daemon</li>
-							<li>Docker Client</li>
-							<li>Docker Hub</li>
+							<li class="fragment fade-up">Docker Image</li>
+							<li class="fragment fade-up">Docker Container</li>
+							<li class="fragment fade-up">Docker Daemon</li>
+							<li class="fragment fade-up">Docker Client</li>
+							<li class="fragment fade-up">Docker Hub</li>
 						</ul>
 					</section>
 					<section>
@@ -146,11 +149,11 @@
 				<section>
 					<h3>Why use containers?</h3>
 					<ul>
-						<li>Lightweight</li>
-						<li>Portable</li>
-						<li>Self-sufficient</li>
-						<li>Scalable</li>
-						<li>Secure</li>
+						<li class="fragment fade-up">Lightweight</li>
+						<li class="fragment fade-up">Portable</li>
+						<li class="fragment fade-up">Self-sufficient</li>
+						<li class="fragment fade-up">Scalable</li>
+						<li class="fragment fade-up">Secure</li>
 					</ul>
 					<aside class="notes">
 						<p>Lightweight: containers share the same kernel, so they don't need to include a full OS.</p>
@@ -163,10 +166,10 @@
 				<section>
 					<h3>Images vs Containers</h3>
 					<ul>
-						<li>Images are read-only</li>
-						<li>Containers are writable</li>
-						<li>Containers are created from images</li>
-						<li>Containers are meant to be temporary</li>
+						<li class="fragment fade-up">Images are read-only</li>
+						<li class="fragment fade-up">Containers are writable</li>
+						<li class="fragment fade-up">Containers are created from images</li>
+						<li class="fragment fade-up">Containers are meant to be temporary</li>
 					</ul>
 					<aside class="notes">
 						<p>Images are read-only templates that contain a set of instructions for creating a container that can run on the Docker platform.</p>
@@ -177,9 +180,9 @@
 				<section>
 					<h3>The Docker Hub</h3>
 					<ul>
-						<li>Official images</li>
-						<li>Community images</li>
-						<li>Private images</li>
+						<li class="fragment fade-up">Official images</li>
+						<li class="fragment fade-up">Community images</li>
+						<li class="fragment fade-up">Private images</li>
 					</ul>
 					<aside class="notes">
 						<p>Official images are Docker images curated and optimized by the Docker community and Docker, Inc.</p>
@@ -188,7 +191,303 @@
 					</aside>
 				</section>
 				<section>
-					<h3>Docker files and images</h3>
+					<section data-auto-animate>
+						<h3>Docker files and images</h3>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker files and images</h3>
+						<h4>How to build an image</h4>
+					</section>
+					<section data-auto-animate>
+						<h4>How to build an image</h4>
+						<p>1. Create a Dockerfile</p>
+					</section>
+					<section data-auto-animate>
+						<h4 data-id="code-title">How to build an image</h4>
+						<p data-id="code-title">1. Create a Dockerfile</p>
+						<pre data-id="code-animation">
+							<code class="hljs" data-trim data-line-numbers="*|1|3,4|6|8|10,11|13">
+								FROM eclipse-temurin:latest
+
+								ENV APP_DIR=/app
+								ENV JVM_OPTS="-XX:InitialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
+
+								ARG JAR_FILE
+
+								WORKDIR ${APP_DIR}
+
+								COPY --chown=java:users target/${JAR_FILE} ./app.jar
+								COPY --chown=java:users ./keystore.jks ./keystore.jks
+
+								ENTRYPOINT exec java $JAVA_OPTIONS $JVM_OPTS -jar ./app.jar
+							</code>
+						</pre>
+						<p><a href="https://docs.docker.com/engine/reference/builder/#dockerfile-reference">Docker file reference docs</a></p>
+						<aside class="notes">
+							<p>Need to specify a base image.</p>
+							<p>First line must be FROM (except for ARG)</p>
+							<p>FROM can be followed by a tag, which is a version of the image</p>
+							<p>ENV declares environment variables that'll be accessible inside the container</p>
+							<p>ARG declares an external argument that should be provided at build time</p>
+							<p>WORKDIR sets (and creates if it does not exist) the working directory inside the container</p>
+							<p>COPY copies files from the host to the container</p>
+							<p>ENTRYPOINT specifies the command that should be executed when the container is started</p>
+						</aside>
+					</section>
+					<section data-auto-animate>
+						<h4>How to build an image</h4>
+						<p>2. Build the image</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How to build an image</h4>
+						<p>2. Build the image</p>
+						<pre>
+							<code class="language-vim">
+								$ docker build -t my-image .
+							</code>
+						</pre>
+					</section>
+					<section data-auto-animate>
+						<h4>How to build an image</h4>
+						<p>2. Build the image</p>
+						<pre>
+							<code class="language-vim">
+								$ docker build -t name:tag .
+							</code>
+						</pre>
+					</section>
+					<section data-auto-animate>
+						<h4>How to build an image</h4>
+						<p>3. Run the container</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How to build an image</h4>
+						<p>3. Run the container</p>
+						<pre>
+							<code class="language-vim">
+								$ docker run my-image
+							</code>
+						</pre>
+					</section>
+				</section>
+				<section>
+					<section data-auto-animate>
+						<h3>Docker files and images</h3>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker files and images</h3>
+						<h4>How is a Docker Image created</h4>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>A series of layers</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>A series of layers</p>
+						<p>Each instruction in the Dockerfile creates a new layer</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>So, this...</p>
+						<pre data-id="code-animation">
+							<code class="hljs" data-trim>
+								FROM eclipse-temurin:latest
+
+								ENV APP_DIR=/app
+								ENV JVM_OPTS="-XX:InitialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
+
+								ARG JAR_FILE
+
+								WORKDIR ${APP_DIR}
+
+								COPY --chown=java:users target/${JAR_FILE} ./app.jar
+								COPY --chown=java:users ./keystore.jks ./keystore.jks
+
+								ENTRYPOINT exec java $JAVA_OPTIONS $JVM_OPTS -jar ./app.jar
+							</code>
+						</pre>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>...becomes this</p>
+						<img src="img/docker-layers.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>...becomes this</p>
+						<img src="img/docker-layers.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+						<p>Each layer builds on top of the previous layers.</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>Layers are cached...</p>
+						<img src="img/docker-layers.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>Layers are cached...</p>
+						<img src="img/docker-layers-rebuild.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+						<p>...so if you change a line in the Dockerfile, only the layers after that line will be rebuilt.</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>And each running container...</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>And each running container...</p>
+						<img src="img/docker-layers-container.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+						<p>...creates it's own layer.</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How is a Docker Image created</h4>
+						<p>And each running container...</p>
+						<img src="img/docker-layers-container.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+						<p>...creates it's own layer.</p>
+						<p>So, if you change a file inside the container, that change will only be visible in that container's layer.</p>
+						<aside class="notes">
+							<p>Instruction order can have an impact on how many layers docker has to rebuild if you change a previous instruction</p>
+							<p>COPY instructions should be placed as late as possible</p>
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section data-auto-animate>
+						<h3>Docker files and images</h3>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker files and images</h3>
+						<h4>Multi-stage builds</h4>
+					</section>
+					<section data-auto-animate>
+						<h4>Multi-stage builds</h4>
+						<ul>
+							<li>Allow to run build steps in parallel</li>
+							<li>Reduce the size of the final image</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h4>Multi-stage builds</h4>
+						<pre>
+							<code data-trim data-line-numbers="*|1,7,10,13">
+								FROM golang:1.21-alpine AS base
+								WORKDIR /src
+								COPY go.mod go.sum .
+								RUN go mod download
+								COPY . .
+
+								FROM base AS build-client
+								RUN go build -o /bin/client ./cmd/client
+
+								FROM base AS build-server
+								RUN go build -o /bin/server ./cmd/server
+
+								FROM scratch
+								COPY --from=0 /bin/client /bin/server /bin/
+								COPY --from=build-client /bin/client /bin/
+								COPY --from=build-server /bin/server /bin/
+								ENTRYPOINT [ "/bin/server" ]
+							</code>
+						</pre>
+						<p style="font-size: small">Example from <a href="https://docs.docker.com/build/guide/multi-stage/">Docker Docs</a></p>
+					</section>
+					<section data-auto-animate>
+						<h4>Multi-stage builds</h4>
+						<p>You can parallelize the build</p>
+						<img src="img/docker-build-parallelism.gif" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+						<p style="font-size: small">Image from <a href="https://docs.docker.com/build/guide/multi-stage/">Docker Docs</a></p>
+					</section>
+				</section>
+				<section>
+					<section data-auto-animate>
+						<h3>Docker files and images</h3>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker files and images</h3>
+						<h4>Best practices</h4>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<ul>
+							<li class="fragment fade-up">Use official images</li>
+							<li class="fragment fade-up">Use multi-stage builds</li>
+							<li class="fragment fade-up">Exclude .dockerignore</li>
+							<li class="fragment fade-up">Create ephemeral containers</li>
+							<li class="fragment fade-up">Don't install unnecessary packages</li>
+							<li class="fragment fade-up">Decouple applications</li>
+							<li class="fragment fade-up">Sort multi-line arguments</li>
+							<li class="fragment fade-up">Leverage the Build Cache</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<h5>Use official images</h5>
+						<p>Official images are curated and optimized by the Docker community and Docker, Inc.</p>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<h5>Use multi-stage builds</h5>
+						<ul>
+							<li>Let you reduce the size of your final image.</li>
+							<li>Make sure that the resulting output only contains the files that's needed to run the application.</li>
+							<li>Build more efficiently by executing build steps in parallel.</li>
+						</ul>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<h5>Exclude .dockerignore</h5>
+						<p>Files and directories specified in .dockerignore are excluded from the build context.</p>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<h5>Create ephemeral containers</h5>
+						<p>Ephemeral means that the container can be stopped and destroyed, then rebuilt and replaced with an absolute minimum set up and configuration.</p>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<h5>Don't install unnecessary packages</h5>
+						<p>Only install the packages that are required for the application to run.</p>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<h5>Decouple applications</h5>
+						<p>Each container should have a single concern.</p>
+						<aside class="notes">
+							<p>Easier to scale horizontally and reuse containers</p>
+							<p>For example, a web application stack might consist of three separate containers, each with its own unique image, that are connected and work together: one container for the web application, one for the application's database, and another for the database admin interface.</p>
+						</aside>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<h5>Sort multi-line arguments</h5>
+						<pre>
+							<code class="hljs" data-trim>
+								RUN apt-get update && apt-get install -y \
+								  bzr \
+								  cvs \
+								  git \
+								  mercurial \
+								  subversion \
+								  && rm -rf /var/lib/apt/lists/*
+							</code>
+						</pre>
+						<aside class="notes">
+							<p>Alphabetical order makes it easier to add new entries, and avoids duplication of parameters</p>
+						</aside>
+					</section>
+					<section data-auto-animate>
+						<h4>Best practices</h4>
+						<h5>Leverage the Build Cache</h5>
+						<p>Perform instructions that are less likely to change at the top of the Dockerfile.</p>
+						<p>For example, RUN instructions that install packages are less likely to change than COPY or ADD instructions.</p>
+						<aside class="notes">
+							<p>Instructions are cached and only rebuilt if they change</p>
+							<p>So, if you change a line in the Dockerfile, only the layers after that line will be rebuilt.</p>
+							<p>Instruction order can have an impact on how many layers docker has to rebuild if you change a previous instruction</p>
+							<p>COPY instructions should be placed as late as possible</p>
+						</aside>
+					</section>
 				</section>
 			</div>
 		</div>
