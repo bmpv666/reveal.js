@@ -77,7 +77,118 @@
 					</aside>
 				</section>
 				<section>
-
+					<section data-auto-animate>
+						<h3>Docker vs Regular VMs</h3>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker vs Regular VMs</h3>
+						<span style="vertical-align: middle">
+							<img src="img/how-vm-works.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+						</span>
+						<aside class="notes">
+							<p>VMs are an abstraction of physical hardware.</p>
+							<p>Each VM includes a full copy of an operating system, the application, necessary binaries and libraries - taking up tens of GBs.</p>
+							<p>VMs can also be slow to boot.</p>
+						</aside>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker vs Regular VMs</h3>
+						<img src="img/how-docker-works.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%"/>
+						<aside class="notes">
+							<p>Docker is an abstraction of the application layer.</p>
+							<p>Containers are isolated from each other and from the host - but they all share the same kernel.</p>
+							<p>Containers can be created and destroyed in seconds.</p>
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section data-transition="zoom-in fade-out">
+						<h3>Terminology</h3>
+						<ul>
+							<li>Docker Image</li>
+							<li>Docker Container</li>
+							<li>Docker Daemon</li>
+							<li>Docker Client</li>
+							<li>Docker Hub</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Docker Image</h2>
+						<p>
+							A Docker image is a read-only template that contains a set of instructions for creating a container that can run on the Docker platform.
+						</p>
+					</section>
+					<section>
+						<h2>Docker Container</h2>
+						<p>
+							A Docker container is a runnable instance of an image. You can create, start, stop, move, or delete a container using the Docker API or CLI.
+						</p>
+					</section>
+					<section>
+						<h2>Docker Daemon</h2>
+						<p>
+							The Docker daemon (dockerd) listens for Docker API requests and manages Docker objects such as images, containers, networks, and volumes.
+						</p>
+					</section>
+					<section>
+						<h2>Docker Client</h2>
+						<p>
+							The Docker client (docker) is the primary way that many Docker users interact with Docker. When you use commands such as docker run, the client sends these commands to dockerd, which carries them out.
+						</p>
+					</section>
+					<section>
+						<h2>Docker Hub</h2>
+						<p>
+							Docker Hub is a cloud-based registry service which allows you to link to code repositories, build your images and test them, stores manually pushed images, and links to Docker Cloud so you can deploy images to your hosts.
+						</p>
+					</section>
+				</section>
+				<section>
+					<h3>Why use containers?</h3>
+					<ul>
+						<li>Lightweight</li>
+						<li>Portable</li>
+						<li>Self-sufficient</li>
+						<li>Scalable</li>
+						<li>Secure</li>
+					</ul>
+					<aside class="notes">
+						<p>Lightweight: containers share the same kernel, so they don't need to include a full OS.</p>
+						<p>Portable: containers can run on any system that has Docker installed.</p>
+						<p>Self-sufficient: containers include all the dependencies they need to run.</p>
+						<p>Scalable: containers can be easily scaled and orchestrated.</p>
+						<p>Secure: containers are isolated from each other and from the host.</p>
+					</aside>
+				</section>
+				<section>
+					<h3>Images vs Containers</h3>
+					<ul>
+						<li>Images are read-only</li>
+						<li>Containers are writable</li>
+						<li>Containers are created from images</li>
+						<li>Containers are meant to be temporary</li>
+					</ul>
+					<aside class="notes">
+						<p>Images are read-only templates that contain a set of instructions for creating a container that can run on the Docker platform.</p>
+						<p>Containers are writable, and they are created from images.</p>
+						<p>Containers are meant to be temporary, and they can be created and destroyed in seconds.</p>
+					</aside>
+				</section>
+				<section>
+					<h3>The Docker Hub</h3>
+					<ul>
+						<li>Official images</li>
+						<li>Community images</li>
+						<li>Private images</li>
+					</ul>
+					<aside class="notes">
+						<p>Official images are Docker images curated and optimized by the Docker community and Docker, Inc.</p>
+						<p>Community images are Docker images created and shared by Docker community members.</p>
+						<p>Private images are Docker images that you or your organization create and store in your own private registry.</p>
+					</aside>
+				</section>
+				<section>
+					<h3>Docker files and images</h3>
 				</section>
 			</div>
 		</div>
