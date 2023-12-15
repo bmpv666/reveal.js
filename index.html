@@ -43,7 +43,8 @@
 								- Multi-stage builds <!-- .element: class="fragment" data-fragment-index="4" -->
 								- Best practices <!-- .element: class="fragment" data-fragment-index="5" -->
 							- Docker Compose (vs Docker files) <!-- .element: class="fragment" data-fragment-index="6" -->
-								- How to use an existing Docker image <!-- .element: class="fragment" data-fragment-index="7" -->
+								- How to use Docker Compose <!-- .element: class="fragment" data-fragment-index="7" -->
+							- Docker Swarm <!-- .element: class="fragment" data-fragment-index="8" -->
 						</script>
 					</section>
 				</section>
@@ -370,7 +371,7 @@
 					<section data-auto-animate>
 						<h4>Multi-stage builds</h4>
 						<pre>
-							<code data-trim data-line-numbers="*|1,7,10,13">
+							<code data-trim data-line-numbers="*|1,7,10,13|8,11">
 								FROM golang:1.21-alpine AS base
 								WORKDIR /src
 								COPY go.mod go.sum .
@@ -412,7 +413,7 @@
 						<ul>
 							<li class="fragment fade-up">Use official images</li>
 							<li class="fragment fade-up">Use multi-stage builds</li>
-							<li class="fragment fade-up">Exclude .dockerignore</li>
+							<li class="fragment fade-up">Exclude with .dockerignore</li>
 							<li class="fragment fade-up">Create ephemeral containers</li>
 							<li class="fragment fade-up">Don't install unnecessary packages</li>
 							<li class="fragment fade-up">Decouple applications</li>
@@ -429,14 +430,14 @@
 						<h4>Best practices</h4>
 						<h5>Use multi-stage builds</h5>
 						<ul>
-							<li>Let you reduce the size of your final image.</li>
+							<li>Lets you reduce the size of your final image.</li>
 							<li>Make sure that the resulting output only contains the files that's needed to run the application.</li>
 							<li>Build more efficiently by executing build steps in parallel.</li>
 						</ul>
 					</section>
 					<section data-auto-animate>
 						<h4>Best practices</h4>
-						<h5>Exclude .dockerignore</h5>
+						<h5>Exclude with .dockerignore</h5>
 						<p>Files and directories specified in .dockerignore are excluded from the build context.</p>
 					</section>
 					<section data-auto-animate>
@@ -487,6 +488,144 @@
 							<p>Instruction order can have an impact on how many layers docker has to rebuild if you change a previous instruction</p>
 							<p>COPY instructions should be placed as late as possible</p>
 						</aside>
+					</section>
+				</section>
+				<section data-auto-animate>
+					<h3>Docker Compose</h3>
+				</section>
+				<section data-auto-animate>
+					<h3>Docker Compose</h3>
+					<p>Tool for defining and running multi-container Docker applications.</p>
+					<p>Simplifies the process of running and orchestrating multiple Docker containers that work together as a single application.</p>
+				</section>
+				<section data-auto-animate>
+					<h3>Docker Compose</h3>
+					<ul>
+						<li class="fragment fade-up">Service Definition</li>
+						<li class="fragment fade-up">Container Orchestration</li>
+						<li class="fragment fade-up">Environment Standardization</li>
+						<li class="fragment fade-up">Easy setup and tear down</li>
+						<li class="fragment fade-up">Scalability and load balancing</li>
+						<li class="fragment fade-up">Integration with other tools</li>
+					</ul>
+					<aside class="notes">
+						<p>Service definition: Docker Compose allows you to define multiple services, each representing a containerized component of your application. You can specify the image to use, container dependencies, environment variables, ports to expose, and other configuration options for each service.</p>
+						<p>Container orchestration: Docker Compose simplifies the process of running and managing multiple containers as a cohesive unit. It automatically creates and starts all the necessary containers based on the configuration defined in the docker-compose.yml file. It also handles the inter-container communication and networking.</p>
+						<p>Environment standardization: Docker Compose helps ensure consistent environments across different development stages. By defining the application's services and their configurations in a single file, developers can easily share and replicate the same environment on different machines, reducing the "it works on my machine" problem.</p>
+						<p>Easy setup and teardown: Docker Compose provides simple commands to start, stop, and remove the entire application stack defined in the docker-compose.yml file. This makes it easy to set up the application for development, testing, or production environments and tear it down when no longer needed.</p>
+						<p>Scalability and load balancing: Docker Compose integrates with Docker Swarm mode, allowing you to scale your application services horizontally by increasing the number of container replicas. It also supports load balancing across the replicated containers, distributing the incoming traffic efficiently.</p>
+						<p>Integration with other tools: Docker Compose integrates well with other Docker ecosystem tools, such as Docker Swarm for orchestration, Docker Registry for image management, and Docker volumes for data persistence. It can be seamlessly integrated into CI/CD pipelines and automation workflows.</p>
+					</aside>
+				</section>
+				<section>
+					<section data-auto-animate>
+						<h3>Docker Compose</h3>
+					</section>
+					<section data-auto-animate>
+						<h3>Docker Compose</h3>
+						<h4>How to use Docker Compose</h4>
+					</section>
+					<section data-auto-animate>
+						<h4>How to use Docker Compose</h4>
+						<p>1. Create a docker-compose.yml file</p>
+					</section>
+					<section data-auto-animate>
+						<h4 data-id="code-title">How to use Docker Compose</h4>
+						<p data-id="code-title">1. Create a docker-compose.yml file</p>
+						<pre data-id="code-animation">
+							<code class="hljs" data-trim data-line-numbers="*|1|2|3,12,22|4,13,23|5,6|7,8|9,10|14-18|25,26">
+								version: '3.8'
+								services:
+									web:
+										image: nginx:latest
+										ports:
+										  - 80:80
+										volumes:
+										  - ./web:/usr/share/nginx/html
+										depends_on:
+										  - db
+
+									db:
+										image: mysql:latest
+										environment:
+										  - MYSQL_ROOT_PASSWORD=secret
+										  - MYSQL_DATABASE=myapp
+										  - MYSQL_USER=myuser
+										  - MYSQL_PASSWORD=mypassword
+										volumes:
+										  - dbdata:/var/lib/mysql
+
+									cache:
+										image: redis:latest
+
+								volumes:
+									dbdata:
+							</code>
+						</pre>
+						<p><a href="https://docs.docker.com/compose/compose-file/">Docker compose file reference docs</a></p>
+						<aside class="notes">
+							<p>Volume allows for persistence and separates the data from the container, and it can be reused across container restarts or on different machines.</p>
+						</aside>
+					</section>
+					<section data-auto-animate>
+						<h4 data-id="code-title">How to use Docker Compose</h4>
+						<p data-id="code-title">You can use interpolation</p>
+						<pre data-id="code-animation">
+							<code class="hljs" data-trim data-line-numbers="5,8">
+								...
+									db:
+										image: mysql:latest
+										environment:
+										  - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+										  - MYSQL_DATABASE=myapp
+										  - MYSQL_USER=myuser
+										  - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+										volumes:
+										  - dbdata:/var/lib/mysql
+								...
+							</code>
+						</pre>
+					</section>
+					<section data-auto-animate>
+						<h4>How to use Docker Compose</h4>
+						<p>2. Run the container</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How to use Docker Compose</h4>
+						<p>2. Run the container</p>
+						<pre>
+							<code class="language-vim">
+								$ docker-compose up -d
+							</code>
+						</pre>
+					</section>
+					<section data-auto-animate>
+						<h4>How to use Docker Compose</h4>
+						<p>2. Run the container</p>
+						<p>or you just start a specific service...</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How to use Docker Compose</h4>
+						<p>2. Run the container</p>
+						<p>or you just start a specific service...</p>
+						<pre>
+							<code class="language-vim">
+								$ docker-compose up -d web
+							</code>
+						</pre>
+					</section>
+					<section data-auto-animate>
+						<h4>How to use Docker Compose</h4>
+						<p>3. Stop the container</p>
+					</section>
+					<section data-auto-animate>
+						<h4>How to use Docker Compose</h4>
+						<p>3. Stop the container</p>
+						<pre>
+							<code class="language-vim">
+								$ docker-compose down
+							</code>
+						</pre>
 					</section>
 				</section>
 			</div>
